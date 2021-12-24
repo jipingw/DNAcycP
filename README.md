@@ -47,7 +47,7 @@ Example 1:
 python3 dnacycp.py -i ex1.fasta -b ex1
 ```
 
-`-i` specifies input file named "ex1.fasta". Without `-t` option, the input file is regarded as in FASTA format. The predicted C-score will be saved in files, one for each sequence with two columns named `Position` and `C-score`. The output file will be named as "eb1_cyc_1.txt", "eb1_cyc_2.txt"..., for the first, second sequence etc. 
+The `-i` option specifies input file named "ex1.fasta". Without `-t` option, the input file is regarded as in FASTA format. The predicted C-score will be saved in files, one for each sequence with two columns named `Position` and `C-score`. The output file will be named as "eb1_cyc_1.txt", "eb1_cyc_2.txt"..., for the first, second sequence etc. 
 
 
 Example 2:

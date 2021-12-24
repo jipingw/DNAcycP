@@ -9,7 +9,7 @@ Li, K., Carroll, M., Vafabakhsh, R., Wang, X.A. and Wang, J.-P., DNAcycP: A Deep
 
 ## What is DNAcycP?
 
-**DNAcycP**, short for **DNA** **cyc**lizablity **P**rediction, is a Python package to accurate predict DNA intrinsic cyclizablity score. It was built upon a deep learning architecture with a hybrid of Inception and Residual network structure and an LSTM layer. DNAcycP was trained based on loop-seq data from Basu et al 2021 (see below). The predicted score, termed **C-score** achieves high accuracy compared to the experimentally measured cyclizablity score by loop-seq assay.
+**DNAcycP**, short for **DNA** **cyc**lizablity **P**rediction, is a Python package for accurate predict of DNA intrinsic cyclizablity score. It was built upon a deep learning architecture with a hybrid of Inception and Residual network structure and an LSTM layer. DNAcycP was trained based on loop-seq data from Basu et al 2021 (see below). The predicted score, termed **C-score** achieves high accuracy compared to the experimentally measured cyclizablity score by loop-seq assay.
 
 ## Available format of DNAcycP
 
@@ -18,7 +18,7 @@ DANcycP is available in two formats: A web server available at http://DNAcycP.st
 
 ## Architecture of DNAcycP
 
-The core of DNAcycP is a deep learning architecture pipeline mixed with Inception-ResNet structure and an LSTM layer (IR+LSTM, Fig 1b) that processes the sequence and its reverse complement separately, the results from which are averaged and detrended to reach the predicted intrinsic score. (Fig 1a).
+The core of DNAcycP is a deep learning architecture mixed with an Inception-ResNet structure and an LSTM layer (IR+LSTM, Fig 1b) that processes the sequence and its reverse complement separately, the results from which are averaged and detrended to reach the predicted intrinsic score. (Fig 1a).
 
 IR+LSTM starts with a convolutional layer for dimension reduction such that the encoded sequence space is reduced from 2D to 1D. The output is fed into an inception module that contains two parallel branches, each having two sequentially connected convolutional layers with branch-specific kernels to capture sequence features of different scale. The first branch has kernel dimension 3x1 for both layers and the second has kernel dimension 11x1 and 21x1 sequentially. The output of the inception module is combined by concatenation and added back to the input of the inception module to form a short circuit or residual network. Finally, the IR+LSTM concludes with a dense layer to predict output with linear activation function. 
 

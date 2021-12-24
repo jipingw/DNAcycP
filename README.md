@@ -1,7 +1,7 @@
 DNAcycP Python package 
 ================
 
-**Maintainer**: Ji-Ping Wang, \<<jzwang@northwestern.edu>\>, Keren Li, \<<keren.li@northwestern.edu>\>
+**Maintainer**: Ji-Ping Wang, \<<jzwang@northwestern.edu>\>; Keren Li, \<<keren.li@northwestern.edu>\>
 
 **Cite DNAcycP package**:
 

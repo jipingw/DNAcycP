@@ -35,7 +35,7 @@ IR+LSTM starts with a convolutional layer for dimension reduction such that the 
 
 DNAcycP supports the input sequence in two formats: FASTA format (with sequence name line beginning with “>”) or plain TEXT format. Unlike in the webserver version where only one sequence is allowed in input for prediction, the Python package allows multiple sequences in the same input file. In particular for the TEXT format, each line (can be of different length) in the file is regarded as one input sequence for prediction. 
 
-The main funciton in DNAcycP is `dancycp.py` which carries two arguments:
+The main funciton in DNAcycP is `dancycp.py` which carries three arguments:
 
   * `-i`: input file name
   * `-b`: prediction output file name base

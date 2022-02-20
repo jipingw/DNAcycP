@@ -1,5 +1,4 @@
 import keras
-import sys, getopt
 import pandas as pd
 import numpy as np
 from numpy import array
@@ -18,7 +17,6 @@ def dnaOneHot(sequence):
         onehot_encoded = np.zeros(5)
         onehot_encoded[code[char]] = 1
         onehot_encoded_seq.append(onehot_encoded[0:4])
-        
     return onehot_encoded_seq
 
 def cycle_fasta(inputfile, outputbase):
@@ -83,39 +81,3 @@ def cycle_txt(inputfile, outputbase):
         for row in output_cycle:
             s = " ".join(map(str, row))
             file.write(s+'\n')
-
-
-def main(argv):
-    inputfile = ''
-    outputfile = ''
-    verbose = False
-    try:
-        opts, args = getopt.getopt(argv,"hi:b:t",["help","inputfile=","basename=","txt"])
-    except getopt.GetoptError:
-        print("DNAsysP_fasta.py -i <inputfile> -b <basename> -t")
-        sys.exit(2)
-    for opt, arg in opts:
-        if opt == '-h':
-            print("DNAsysP_fasta.py -i <inputfile> -b <basename> -t \n Examples: \n python3 DNAsysP_fasta.py -i ex1.fasta -b ex1 \n python3 DNAsysP_fasta.py -i ex2.txt -b ex2 -t")
-            sys.exit()
-        elif opt in ("-i", "--inputfile"):
-            inputfile = arg
-            print("Input file: "+inputfile)
-        elif opt in ("-b", "--basename"):
-            outputbase = arg
-        elif opt in ("-t", "--txt"):
-            verbose = True
-    if verbose:
-        cycle_txt(inputfile, outputbase)
-    else:
-        cycle_fasta(inputfile, outputbase)
-            
-   # cycle_fasta(inputfile, outputbase)
-    
-if __name__ == "__main__":
-    main(sys.argv[1:])
-
-
-## example
-## python3 dnacycp.py -i ex1.fasta -b ex1
-## python3 dnacycp.py -i ex2.txt -b ex2 -t

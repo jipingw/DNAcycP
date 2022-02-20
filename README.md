@@ -77,7 +77,7 @@ where
   * `<inputfile>`: is the name of the intput file;
   * `<basename>`: is the name base for the output file.
 
-Example 1:
+### Example 1:
 
 ```bash
 dnacycp-cli -f ./data/raw/ex1.fasta ./data/raw/ex1
@@ -89,7 +89,7 @@ For example, `ex1.fasta` contains two sequences named ">seq1" and ">myseq2" resp
 The output file will be named as "ex1_cycle_seq1.txt", "ex1_cycle_myseq2.txt"for the first and second sequences respectively.
 
 
-Example 2:
+### Example 2:
 
 ```bash
 dnacycp-cli -t ./data/raw/ex2.txt ./data/raw/ex2
@@ -98,6 +98,14 @@ With `-t` option, the input file is regarded as in TXT format, each line represe
 The predicted C-scores will be saved in one file, with C-scores in each line corresponding to the sequence in the input file in the same order.
 
 For any input sequence, DNAcycP predicts the C-score for every 50 bp. Regardless of the input sequence format the first C-score in the output file corresponds to the sequence from position 1-50, second for 2-51 and so forth.
+
+### Run prediction within Python interactive session
+
+```python
+from dnacycp import cycle_fasta, cycle_txt
+cycle_fasta("data/raw/ex1.fasta","example1")
+cycle_txt("data/raw/ex2.txt","example2")
+```
 
 
 ## Other References

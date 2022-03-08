@@ -7,6 +7,8 @@ from Bio import SeqIO
 network_final = keras.models.load_model("irlstm")
 detrend_int = 0.018608475103974342
 detrend_slope = 1.033974289894104
+normal_mean = -0.18574825868055558
+normal_std = 0.4879013326394626
 
 def dnaOneHot(sequence):
     seq_array = array(list(sequence))
@@ -49,10 +51,11 @@ def cycle_fasta(inputfile, outputbase):
         fit_reverse = [item for sublist in fit_reverse for item in sublist]
         fit_reverse = array(fit_reverse)
         fit = detrend_int + (fit + fit_reverse) * detrend_slope/2
+        fit2 = fit * normal_std + normal_mean
         n = fit.shape[0]
-        fitall = np.vstack((range(25,25+n),fit))
+        fitall = np.vstack((range(25,25+n),fit,fit2))
         fitall = pd.DataFrame([*zip(*fitall)])
-        fitall.columns = ["posision","c_score"]
+        fitall.columns = ["posision","c_score_norm","c_score_unnorm",]
         fitall = fitall.astype({"posision": int})
         fitall.to_csv(outputbase+"_cycle_"+chrom+".txt", index = False)
         print("Output file: "+outputbase+"_cycle_"+chrom+".txt")
@@ -77,7 +80,12 @@ def cycle_txt(inputfile, outputbase):
         cycle_local = detrend_int + (cycle_local + cycle_local_reverse) * detrend_slope/2
         cycle_local = cycle_local.reshape(cycle_local.shape[0])
         output_cycle.append(cycle_local)
-    with open(outputbase+"_cycle.txt", "w") as file:
+    with open(outputbase+"_cycle_norm.txt", "w") as file:
         for row in output_cycle:
+            s = " ".join(map(str, row))
+            file.write(s+'\n')
+    output_cycle2 = [item * normal_std + normal_mean for item in output_cycle]
+    with open(outputbase+"_cycle_unnorm.txt", "w") as file:
+        for row in output_cycle2:
             s = " ".join(map(str, row))
             file.write(s+'\n')

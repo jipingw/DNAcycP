@@ -55,7 +55,7 @@ def cycle_fasta(inputfile, outputbase):
         n = fit.shape[0]
         fitall = np.vstack((range(25,25+n),fit,fit2))
         fitall = pd.DataFrame([*zip(*fitall)])
-        fitall.columns = ["posision","c_score_norm","c_score_unnorm",]
+        fitall.columns = ["posision","c_score_norm","c_score_unnorm"]
         fitall = fitall.astype({"posision": int})
         fitall.to_csv(outputbase+"_cycle_"+chrom+".txt", index = False)
         print("Output file: "+outputbase+"_cycle_"+chrom+".txt")

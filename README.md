@@ -73,7 +73,7 @@ The main funciton in DNAcycP is `dancycp-cli`, which can be called as follows:
 dnacycp-cli -f/-t <inputfile> <basename>
 ```
 where 
-  * `-f/-t`: indicates the input file name in FASTA or TXT format respectively;
+  * `-f/-t`: indicates the input file name in FASTA or TXT format respectively; either one must be specified.
   * `<inputfile>`: is the name of the intput file;
   * `<basename>`: is the name base for the output file.
 
@@ -83,10 +83,9 @@ where
 dnacycp-cli -f ./data/raw/ex1.fasta ./data/raw/ex1
 ```
 The `-f` option specifies that the input file named "ex1.fasta" is in fasta format. 
-Without `-t` option, the input file is regarded as in FASTA format. The predicted C-score will be saved in files, one for each sequence with two columns named `Position` and `C-score`. 
-The `./data/raw/ex1.fasta` is the sequence file path and name, and `./data/raw/ex1` specifies the output file will be saved in the directory `./data/raw` with file name marked as `ex1`.
+The `./data/raw/ex1.fasta` is the sequence file path and name, and `./data/raw/ex1` specifies the output file will be saved in the directory `./data/raw` with file name initialized with `ex1`.
 For example, `ex1.fasta` contains two sequences named ">seq1" and ">myseq2" respectively.
-The output file will be named as "ex1_cycle_seq1.txt", "ex1_cycle_myseq2.txt"for the first and second sequences respectively.
+The output file will be named as "ex1_cycle_seq1.txt", "ex1_cycle_myseq2.txt"for the first and second sequences respectively. Each file contains three columns: `position`, `C_score_norm`, `C_score_unnorm`. The `C_score_norm` is the predicted C-score from the model trained based on the standardized loop-seq score of the tiling library of Basu et al 2021 (i.e. 0 mean unit variance). The `C_score_unnorm` is the predicted C-score recovered to the original scale of loop-seq score in the tiling library data from Basu et el 2021. The standardized loop-seq score provides two advantages. As loop-seq may be subject to a library-specific constant, standardized C-score is defined with a unified baseline as yeast genome (i.e. 0 mean in yeast genome). Secondly, the C-score provides statisitcal significance indicator, i.e. a C-score of 1.96 indicates 97.5% in the distribution.
 
 
 ### Example 2:
@@ -95,7 +94,7 @@ The output file will be named as "ex1_cycle_seq1.txt", "ex1_cycle_myseq2.txt"for
 dnacycp-cli -t ./data/raw/ex2.txt ./data/raw/ex2
 ```
 With `-t` option, the input file is regarded as in TXT format, each line representing a sequence without sequence name line that begins with ">".
-The predicted C-scores will be saved in one file, with C-scores in each line corresponding to the sequence in the input file in the same order.
+The predicted C-scores will be saved into two files, one with `_unnorm.txt` and the other with `_norm.txt` for unnormalized and normalized C-score, with C-scores in each line corresponding to the sequence in the input file in the same order.
 
 For any input sequence, DNAcycP predicts the C-score for every 50 bp. Regardless of the input sequence format the first C-score in the output file corresponds to the sequence from position 1-50, second for 2-51 and so forth.
 

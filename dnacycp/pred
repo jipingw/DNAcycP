@@ -104,9 +104,6 @@ def cycle_txt(inputfile, outputbase):
             s = " ".join(map(str, row))
             file.write(s+'\n')
             
-#cycle_txt("../data/raw/ex1.fasta",'../tryout/tryout')
-
-###new functions with splitting
 def cycle_fasta_single(onehot_sequence, index,outputbase,chrom):
     fit = []
     fit_reverse = []

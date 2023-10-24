@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from numpy import array
 from Bio import SeqIO
+import time
 
 network_final = keras.models.load_model("irlstm")
 detrend_int = 0.018608475103974342
@@ -89,3 +90,94 @@ def cycle_txt(inputfile, outputbase):
         for row in output_cycle2:
             s = " ".join(map(str, row))
             file.write(s+'\n')
+
+def cycle_fasta_single(onehot_sequence, index,outputbase,chrom):
+    fit = []
+    fit_reverse = []
+    for ind_local in np.array_split(range(25, onehot_sequence.shape[0] - 24), 100):
+        onehot_sequence_local = []
+        for i in ind_local:
+            s = onehot_sequence[(i - 25):(i + 25), ]
+            onehot_sequence_local.append(s)
+        onehot_sequence_local = array(onehot_sequence_local)
+        onehot_sequence_local = onehot_sequence_local.reshape((onehot_sequence_local.shape[0], 50, 4, 1))
+        onehot_sequence_local_reverse = np.flip(onehot_sequence_local, [1, 2])
+        fit_local = network_final.predict(onehot_sequence_local)
+        fit_local = fit_local.reshape((fit_local.shape[0]))
+        fit.append(fit_local)
+        fit_local_reverse = network_final.predict(onehot_sequence_local_reverse)
+        fit_local_reverse = fit_local_reverse.reshape((fit_local_reverse.shape[0]))
+        fit_reverse.append(fit_local_reverse)
+    fit = [item for sublist in fit for item in sublist]
+    fit = array(fit)
+    fit_reverse = [item for sublist in fit_reverse for item in sublist]
+    fit_reverse = array(fit_reverse)
+    fit = detrend_int + (fit + fit_reverse) * detrend_slope / 2
+    fit2 = fit * normal_std + normal_mean
+    n = fit.shape[0]
+    fitall = np.vstack((range(index, index + n), fit, fit2))
+    fitall = pd.DataFrame([*zip(*fitall)])
+    fitall.columns = ["posision", "c_score_norm", "c_score_unnorm"]
+    fitall = fitall.astype({"posision": int})
+    fitall.to_csv(outputbase + "_cycle_" + chrom +"_"+ str(index) + ".txt", index=False)
+    print("Output file: " + outputbase + "_cycle_" + chrom +"_"+ str(index) + ".txt")
+
+def cycle_fasta_threads(inputfile, outputbase,n):
+    start_time = time.time()
+    print("start_time:",start_time)
+    genome_file = SeqIO.parse(open(inputfile),'fasta')
+    for fasta in genome_file:
+        chrom = fasta.id
+        genome_sequence = str(fasta.seq)
+        onehot_sequence = dnaOneHot(genome_sequence)
+        onehot_sequence = array(onehot_sequence)
+        onehot_sequence = onehot_sequence.reshape((onehot_sequence.shape[0],4,1))
+        #print(onehot_sequence)
+        #print(onehot_sequence.shape)
+        print("sequence length: "+chrom+" "+str(onehot_sequence.shape[0]))
+        #onehot_sequence_split = []
+        #result = [0] * onehot_sequence.shape[0]
+        for ind_local in np.array_split(range(25, onehot_sequence.shape[0] - 24), n):
+            start_time_1 = time.time()
+            s = onehot_sequence[(ind_local[0] - 25):(ind_local[-1] + 25), ]
+            print(ind_local[0], ind_local[-1])
+            cycle_fasta_single(s,ind_local[0],outputbase,chrom)
+            end_time_1 = time.time()
+            print(end_time_1-start_time_1)
+            with open(outputbase + "running_time.txt", "a") as file:
+                file.write(str(end_time_1 - start_time_1) + '\n')
+        end_time = time.time()
+        print("running time:", end_time-start_time)
+        with open(outputbase + "running_time.txt", "a") as file:
+            file.write(str(end_time-start_time) + '\n')
+
+def auto_cycle_fasta_threads(inputfile, outputbase):
+    start_time = time.time()
+    print("start_time:", start_time)
+    genome_file = SeqIO.parse(open(inputfile), 'fasta')
+    for fasta in genome_file:
+        chrom = fasta.id
+        genome_sequence = str(fasta.seq)
+        onehot_sequence = dnaOneHot(genome_sequence)
+        onehot_sequence = array(onehot_sequence)
+        onehot_sequence = onehot_sequence.reshape((onehot_sequence.shape[0], 4, 1))
+        # print(onehot_sequence)
+        #print(onehot_sequence.shape)
+        l = onehot_sequence.shape[0]
+        n = l//20000000+1
+        print("sequence length: " + chrom + " " + str(onehot_sequence.shape[0]))
+        # onehot_sequence_split = []
+        # result = [0] * onehot_sequence.shape[0]
+        for ind_local in np.array_split(range(25, onehot_sequence.shape[0] - 24), n):
+            start_time_1 = time.time()
+            s = onehot_sequence[(ind_local[0] - 25):(ind_local[-1] + 25), ]
+            print(ind_local[0], ind_local[-1])
+            cycle_fasta_single(s, ind_local[0], outputbase, chrom)
+            end_time_1 = time.time()
+            print(end_time_1 - start_time_1)
+            with open(outputbase + "running_time.txt", "a") as file:
+                file.write(str(end_time_1 - start_time_1) + '\n')
+        end_time = time.time()
+        print("running time:", end_time - start_time)
+        with open(outputbase + "running_time.txt", "a") as file:
+            file.write(str(end_time - start_time) + '\n')

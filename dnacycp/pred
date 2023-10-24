@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 from numpy import array
 from Bio import SeqIO
-import threading
 import time
 
 

@@ -7,7 +7,7 @@ import threading
 import time
 
 
-network_final = keras.models.load_model("../irlstm") #小改动
+network_final = keras.models.load_model("../irlstm") 
 detrend_int = 0.018608475103974342
 detrend_slope = 1.033974289894104
 normal_mean = -0.18574825868055558

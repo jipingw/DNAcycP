@@ -2,8 +2,8 @@
 
 Usage:
     dnacycp-cli -f <inputfile> <basename>
-    dnacycp-cli -af <inputfile> <basename>
-    dnacycp-cli -mf <inputfile> <basename> <n>
+    dnacycp-cli -a <inputfile> <basename>
+    dnacycp-cli -m <inputfile> <basename> <n>
     dnacycp-cli -t <inputfile> <basename>
     dnacycp-cli (-h | --help)
     
@@ -15,8 +15,8 @@ Arguments:
 Options:
     -h --help   Show this screen.
     -f          FASTA mode.
-    -af         auto threading for FASTA mode.
-    -mf         manual threading for FASTA mode.
+    -a          auto threading for FASTA mode.
+    -m          manual threading for FASTA mode.
     -t          TXT mode.
     
 """
@@ -35,15 +35,16 @@ def main():
     if arguments['-f']:
         cycle_fasta(arguments['<inputfile>'],
             arguments['<basename>'])
-    elif arguments['-t']:
-        cycle_txt(arguments['<inputfile>'],
-            arguments['<basename>'])
-    elif arguments['-af']:
+    if arguments['-a']:
         auto_cycle_fasta_threads(arguments['<inputfile>'],
             arguments['<basename>'])
-    elif arguments['-mf']:
+    if arguments['-m']:
         cycle_fasta_threads(arguments['<inputfile>'],
-            arguments['<basename>'], arguments['<n>'])
+            arguments['<basename>'], int(arguments['<n>']))
+    if arguments['-t']:
+        cycle_txt(arguments['<inputfile>'],
+            arguments['<basename>'])
+
             
 if __name__ == "__main__":
     main()

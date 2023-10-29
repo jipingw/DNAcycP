@@ -34,6 +34,7 @@ IR+LSTM starts with a convolutional layer for dimension reduction such that the 
 * `pandas==1.3.5`
 * `numpy==1.21.5`
 * `docopt==0.6.2`
+* `protobuf==3.20.0`
 
 
 ## Installation
@@ -41,7 +42,7 @@ IR+LSTM starts with a convolutional layer for dimension reduction such that the 
 **DNAcycP** Python package requires specific versions of dependencies. We recommend to install and run **DNAcycP** in a virtual environment. For example, suppose the downloaded DNAcycP package is unpacked as a folder `dnacycp-main`. We can install DNAcycP in a virtual environment as below:
 
 ```bash
-cd dnacycp-main
+cd DNAcycP-main
 python3 -m venv env
 source env/bin/activate test
 pip install -e .
@@ -70,13 +71,16 @@ DNAcycP supports the input sequence in two formats: FASTA format (with sequence 
 
 The main funciton in DNAcycP is `dancycp-cli`, which can be called as follows:
 ```bash
-dnacycp-cli -f/-t <inputfile> <basename>
+dnacycp-cli -f/-a/-t <inputfile> <basename>
+or
+dnacycp-cli -m <inputfile> <basename> <n>
 ```
 where 
   * `-f/-t`: indicates the input file name in FASTA or TXT format respectively; either one must be specified.
   * `<inputfile>`: is the name of the intput file;
   * `<basename>`: is the name base for the output file.
-
+  * `<n>`: is the number of batchs you want to divide the chromosome sequence into
+  
 ### Example 1:
 
 ```bash
@@ -84,11 +88,34 @@ dnacycp-cli -f ./data/raw/ex1.fasta ./data/raw/ex1
 ```
 The `-f` option specifies that the input file named "ex1.fasta" is in fasta format. 
 The `./data/raw/ex1.fasta` is the sequence file path and name, and `./data/raw/ex1` specifies the output file will be saved in the directory `./data/raw` with file name initialized with `ex1`.
+
 For example, `ex1.fasta` contains two sequences named ">seq1" and ">myseq2" respectively.
+
 The output file will be named as "ex1_cycle_seq1.txt", "ex1_cycle_myseq2.txt"for the first and second sequences respectively. Each file contains three columns: `position`, `C_score_norm`, `C_score_unnorm`. The `C_score_norm` is the predicted C-score from the model trained based on the standardized loop-seq score of the tiling library of Basu et al 2021 (i.e. 0 mean unit variance). The `C_score_unnorm` is the predicted C-score recovered to the original scale of loop-seq score in the tiling library data from Basu et el 2021. The standardized loop-seq score provides two advantages. As loop-seq may be subject to a library-specific constant, standardized C-score is defined with a unified baseline as yeast genome (i.e. 0 mean in yeast genome). Secondly, the C-score provides statisitcal significance indicator, i.e. a C-score of 1.96 indicates 97.5% in the distribution.
 
-
 ### Example 2:
+
+```bash
+dnacycp-cli -a ./data/raw/ex1.fasta ./data/raw/ex1
+```
+The `-a` option means that the input file named "ex1.fasta" is in fasta format and the algorithm automaticly evenly divide the chromosomes into batches. The number of the batches is determined by how many times the chromosome length is 20,000,000. 
+
+The `./data/raw/ex1.fasta` is the sequence file path and name, and `./data/raw/ex1` specifies the output file will be saved in the directory `./data/raw` with file name initialized with `ex1`.
+
+For example, `ex1.fasta` contains two sequences named ">seq1" and ">myseq2" respectively. ">seq1" is less than 19,999,999 in length, then it will be kept in one batch. ">myseq2" is 20,000,000 in length. Then it will be evenly divided into two batches.
+The output file will be named as "ex1_cycle_seq1_25.txt" for the first sequences and "ex1_cycle_myseq2_25.txt" and "ex1_cycle_myseq2_10000001.txt" for the second sequences. The number '25' and '10000001' marks the initial position of the batch.
+
+### Example 3:
+
+```bash
+dnacycp-cli -m ./data/raw/ex1.fasta ./data/raw/ex1 n
+```
+The `-m` option means that the input file named "ex1.fasta" is in fasta format and n is the number of the batches the chromosomes are evenly divided into.
+
+The output file will be named in similar way as in Example 2.
+
+
+### Example 4:
 
 ```bash
 dnacycp-cli -t ./data/raw/ex2.txt ./data/raw/ex2

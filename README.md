@@ -128,8 +128,10 @@ For any input sequence, DNAcycP predicts the C-score for every 50 bp. Regardless
 ### Run prediction within Python interactive session
 
 ```python
-from dnacycp import cycle_fasta, cycle_txt
+from dnacycp import cycle_fasta, auto_cycle_fasta_threads, cycle_fasta_threads, cycle_txt
 cycle_fasta("data/raw/ex1.fasta","example1")
+auto_cycle_fasta_threads("data/raw/ex1.fasta","example1")
+cycle_fasta_threads("data/raw/ex1.fasta","example1",n)
 cycle_txt("data/raw/ex2.txt","example2")
 ```
 

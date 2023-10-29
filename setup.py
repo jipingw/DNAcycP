@@ -10,7 +10,8 @@ setup(name='dnacycp',
       'tensorflow==2.7.0',
       'keras==2.7.0',
       'bio==1.3.3',
-      'docopt==0.6.2'
+      'docopt==0.6.2',
+      'protobuf==3.20.0'
       ],
       entry_points={
             'console_scripts': ['dnacycp-cli=dnacycp.cli:main']

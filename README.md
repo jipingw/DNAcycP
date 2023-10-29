@@ -45,7 +45,7 @@ IR+LSTM starts with a convolutional layer for dimension reduction such that the 
 cd DNAcycP-main
 python3 -m venv env
 source env/bin/activate test
-pip install -e .
+pip3 install -e .
 ```
 
 Run `dnacycp-cli ` to see whether it is installed properly.

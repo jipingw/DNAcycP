@@ -76,10 +76,10 @@ or
 dnacycp-cli -m <inputfile> <basename> <n>
 ```
 where 
-  * `-f/-t`: indicates the input file name in FASTA or TXT format respectively; either one must be specified.
+  * `-f/-t/-s/-m`: indicates the input file in FASTA or TXT format and the function we are using; one must be specified.
   * `<inputfile>`: is the name of the intput file;
-  * `<basename>`: is the name base for the output file.
-  * `<n>`: is the number of batchs you want to divide the chromosome sequence into
+  * `<basename>`: is the name base for the output file;
+  * `<n>`: is the number of batchs you want to divide the chromosome sequence into.
   
 ### Example 1:
 

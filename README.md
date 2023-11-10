@@ -102,7 +102,7 @@ The `-a` option means that the input file named "ex1.fasta" is in fasta format a
 
 The `./data/raw/ex1.fasta` is the sequence file path and name, and `./data/raw/ex1` specifies the output file will be saved in the directory `./data/raw` with file name initialized with `ex1`.
 
-For example, `ex1.fasta` contains two sequences named ">seq1" and ">myseq2" respectively. ">seq1" is less than 19,999,999 in length, then it will be kept in one batch. ">myseq2" is 20,000,000 in length. Then it will be evenly divided into two batches.
+If `ex1.fasta` contains two sequences named ">seq1" and ">myseq2" respectively and ">seq1" is less than 19,999,999 in length and ">myseq2" is 20,000,000 in length, then ">seq1" will be kept in one batch and ">myseq2" will be evenly divided into two batches. Note that this is not the case in `ex1.fasta`.
 The output file will be named as "ex1_cycle_seq1_25.txt" for the first sequences and "ex1_cycle_myseq2_25.txt" and "ex1_cycle_myseq2_10000001.txt" for the second sequences. The number '25' and '10000001' marks the initial position of the batch.
 
 ### Example 3:
